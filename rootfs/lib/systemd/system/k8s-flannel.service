@@ -6,8 +6,8 @@ After=k8s-etcd.service
 EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock kill k8s-flannel
 ExecStartPre=-/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock rm k8s-flannel
-ExecStart=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock run -d --name=k8s-flannel --net=host --privileged -v /dev/net:/dev/net andrewpsuedonym/flanneld /flanneld --etcd-endpoints=http://127.0.0.1:4001
-#ExecStartPost=/bin/bash -c "sleep 5;/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock cp k8s-flannel:/run/flannel/subnet.env /etc/kubernetes"
+ExecStart=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock run -d --name=k8s-flannel --net=host --privileged -v /dev/net:/dev/net andrewpsuedonym/flanneld flanneld --etcd-endpoints=http://127.0.0.1:4001
+ExecStartPost=/bin/bash -c "sleep 5;/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock cp k8s-flannel:/run/flannel/subnet.env /etc/kubernetes"
 #ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-flannel
 
 [Install]
