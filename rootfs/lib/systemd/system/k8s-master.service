@@ -3,7 +3,7 @@ Description=The Master Components for Kubernetes
 After=docker.service
 
 [Service]
-EnvironmentFile=/etc/kubernetes/k8s.conf
+#EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker kill k8s-master k8s-master-proxy
 ExecStartPre=-/usr/bin/docker rm k8s-master k8s-master-proxy
 ExecStart=/bin/bash -c "exec docker run 																\
@@ -13,28 +13,21 @@ ExecStart=/bin/bash -c "exec docker run 																\
 						--privileged 																	\
 						-v /sys:/sys:ro 																\
 						-v /var/run:/var/run:rw 														\
-						-v /:/rootfs:ro 																\
-						-v /dev:/dev 																	\
-						-v /var/lib/docker/:/var/lib/docker:rw 											\
-						-v /var/lib/kubelet:/var/lib/kubelet:rw 										\
 						gcr.io/google_containers/hyperkube-arm:v1.1.2 /hyperkube kubelet 				\
 							--v=2 																		\
 							--address=0.0.0.0 															\
 							--enable-server 															\
 							--allow-privileged=true 													\
-                            --cluster-dns=10.0.0.10                                                     \
-                            --cluster-domain=cluster.local                                              \
-							--containerized 															\
 							--pod_infra_container_image="gcr.io/google_containers/pause-arm:2.0" 		\
 							--api-servers=http://localhost:8080 										\
-							--hostname-override=$(/bin/hostname -i | /usr/bin/awk '{print $1}') 	\
+							--hostname-override=127.0.0.1 	\
 							--config=/etc/kubernetes/manifests-multi"
 ExecStartPost=/usr/bin/docker run -d 																	\
 						--name=k8s-master-proxy 														\
 						--net=host 																		\
 						--privileged 																	\
 						gcr.io/google_containers/hyperkube-arm:v1.1.2 /hyperkube proxy 					\
-							--master=http://${K8S_MASTER_IP}:8080 										\
+							--master=http://127.0.0.1:8080 										\
 							--v=2
 #ExecStop=/usr/bin/docker stop k8s-master k8s-master-proxy
 Restart=on-failure
