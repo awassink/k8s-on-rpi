@@ -1,9 +1,9 @@
 [Unit]
-Description=Docker Socket for the API
-PartOf=docker.service
+Description=Docker Bootstrap Socket for the API
+PartOf=docker-bootstrap.service
 
 [Socket]
-ListenStream=/var/run/docker.sock
+ListenStream=/var/run/docker-bootstrap.sock
 SocketMode=0660
 SocketUser=root
 SocketGroup=docker
