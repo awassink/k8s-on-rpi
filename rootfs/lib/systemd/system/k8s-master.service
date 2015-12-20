@@ -27,7 +27,7 @@ ExecStart=/bin/bash -c "exec docker run 																\
 							--containerized 															\
 							--pod_infra_container_image="gcr.io/google_containers/pause-arm:2.0" 		\
 							--api-servers=http://localhost:8080 										\
-							--hostname-override=$(/usr/bin/hostname -i | /usr/bin/awk '{print $1}') 	\
+							--hostname-override=$(/bin/hostname -i | /usr/bin/awk '{print $1}') 	\
 							--config=/etc/kubernetes/manifests-multi"
 ExecStartPost=/usr/bin/docker run -d 																	\
 						--name=k8s-master-proxy 														\
