@@ -24,3 +24,4 @@ systemctl start docker-bootstrap.service
 systemctl start k8s-flannel.service
 systemctl start docker.service
 systemctl start k8s-worker.service
+
