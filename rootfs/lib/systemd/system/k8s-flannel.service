@@ -3,6 +3,7 @@ Description=Flannel Overlay Network for Kubernetes
 After=k8s-etcd.service
 
 [Service]
+TimeoutStartSec=240
 EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock kill k8s-flannel
 ExecStartPre=-/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock rm k8s-flannel
