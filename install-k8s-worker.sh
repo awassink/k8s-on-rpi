@@ -23,10 +23,17 @@ systemctl enable docker-bootstrap.service k8s-flannel.service k8s-worker.service
 
 echo "Starting the docker bootstrap service"
 systemctl start docker-bootstrap.service
+
+echo "Pulling necessary flannel Docker image"
+docker -H unix:///var/run/docker-bootstrap.sock pull andrewpsuedonym/flanneld
 echo "Starting the flannel service"
 systemctl start k8s-flannel.service
+
 echo "Starting the docker service"
 systemctl start docker.service
+
+echo "Pulling necessary kubelet Docker image"
+docker pull gcr.io/google_containers/hyperkube-arm:v1.1.2
 echo "Starting the kubernetes worker service"
 systemctl start k8s-worker.service
 
