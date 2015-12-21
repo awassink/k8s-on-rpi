@@ -18,10 +18,7 @@ systemctl stop docker.service
 systemctl enable docker-bootstrap.service k8s-flannel.service k8s-worker.service
 
 systemctl start docker-bootstrap.service
-sleep 10
 systemctl start k8s-flannel.service
-sleep 10
 systemctl start docker.service
-sleep 10
 systemctl start k8s-worker.service
 

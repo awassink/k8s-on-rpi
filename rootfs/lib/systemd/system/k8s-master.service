@@ -29,13 +29,13 @@ ExecStart=/bin/bash -c "exec docker run \
                             --cluster-domain=cluster.local \
                             --containerized \
 							--config=/etc/kubernetes/manifests-multi"
-ExecStartPost=/usr/bin/docker run -d \
+ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker run -d \
 						--name=k8s-master-proxy \
 						--net=host \
 						--privileged \
 						gcr.io/google_containers/hyperkube-arm:v1.1.2 /hyperkube proxy \
 							--master=http://127.0.0.1:8080 \
-							--v=2
+							--v=2"
 #ExecStop=/usr/bin/docker stop k8s-master k8s-master-proxy
 Restart=on-failure
 RestartSec=5
