@@ -1,14 +1,13 @@
 [Unit]
-Description=The Master Components for Kubernetes
+Description=The Worker Components for Kubernetes
 After=docker.service
-Requires=k8s-etcd.service
 
 [Service]
-#EnvironmentFile=/etc/kubernetes/k8s.conf
-ExecStartPre=-/usr/bin/docker kill k8s-master k8s-master-proxy
-ExecStartPre=-/usr/bin/docker rm k8s-master k8s-master-proxy
+EnvironmentFile=/etc/kubernetes/k8s.conf
+ExecStartPre=-/usr/bin/docker kill k8s-worker k8s-worker-proxy
+ExecStartPre=-/usr/bin/docker rm k8s-worker k8s-worker-proxy
 ExecStart=/bin/bash -c "exec docker run \
-						--name=k8s-master \
+						--name=k8s-worker \
 						--net=host \
 						--pid=host \
 						--privileged \
@@ -24,20 +23,19 @@ ExecStart=/bin/bash -c "exec docker run \
 							--enable-server \
 							--allow-privileged=true \
 							--pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \
-							--api-servers=http://localhost:8080 \
-							--hostname-override=127.0.0.1 \
+							--api-servers=http://${K8S_MASTER_IP}:8080 \
+							--hostname-override=$(/bin/hostname -I | /usr/bin/awk '{print $1}') \
                             --cluster-dns=10.0.0.10 \
                             --cluster-domain=cluster.local \
-                            --containerized \
-							--config=/etc/kubernetes/manifests-multi"
+                            --containerized"
 ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker run -d \
-						--name=k8s-master-proxy \
+						--name=k8s-worker-proxy \
 						--net=host \
 						--privileged \
 						gcr.io/google_containers/hyperkube-arm:v1.1.2 /hyperkube proxy \
-							--master=http://127.0.0.1:8080 \
+							--master=http://${K8S_MASTER_IP}:8080 \
 							--v=2"
-#ExecStop=/usr/bin/docker stop k8s-master k8s-master-proxy
+#ExecStop=/usr/bin/docker stop k8s-worker k8s-worker-proxy
 Restart=on-failure
 RestartSec=5
 

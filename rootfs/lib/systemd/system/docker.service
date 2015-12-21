@@ -2,7 +2,7 @@
 Description=Docker Application Container Engine
 Documentation=https://docs.docker.com
 After=network.target docker.socket k8s-flannel.service
-Requires=docker.socket
+Requires=docker.socket k8s-flannel.service
 
 [Service]
 EnvironmentFile=/etc/kubernetes/subnet.env
@@ -10,6 +10,7 @@ ExecStartPre=-/sbin/ifconfig docker0 down
 ExecStartPre=-/sbin/brctl delbr docker0
 ExecStart=/usr/bin/docker -d -bip=${FLANNEL_SUBNET} -mtu=${FLANNEL_MTU} -H fd:// $DOCKER_OPTS
 EnvironmentFile=-/etc/default/docker
+ExecStartPost=/bin/bash -c "sleep 10"
 MountFlags=slave
 LimitNOFILE=1048576
 LimitNPROC=1048576
