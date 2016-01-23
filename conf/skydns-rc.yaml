@@ -47,7 +47,7 @@ spec:
             memory: 50Mi
         args:
         # command = "/kube2sky"
-        - -domain=cluster.internal
+        - -domain=cluster.local
         - -kube_master_url=http://10.0.0.1:8080
       - name: skydns
         image: gcr.io/google_containers/skydns-arm:2015-12-13
