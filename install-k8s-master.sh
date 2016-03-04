@@ -15,6 +15,10 @@ cp -f ./rootfs/lib/systemd/system/docker.service /lib/systemd/system/docker.serv
 cp -f ./rootfs/lib/systemd/system/docker.socket /lib/systemd/system/docker.socket
 cp -f ./rootfs/lib/systemd/system/k8s-master.service /lib/systemd/system/k8s-master.service
 
+echo "Copying configuration for faster timeout"
+mkdir -p /etc/kubernetes/manifests-multi/
+cp -f ./rootfs/etc/kubernetes/manifests-multi/master.json /etc/kubernetes/manifests-multi/master.json
+
 echo "Reloading the system service configuration"
 systemctl daemon-reload
 
