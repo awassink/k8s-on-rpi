@@ -41,7 +41,7 @@ echo "Starting the docker service"
 systemctl start docker.service
 
 echo "Pulling necessary hyperkube Docker image"
-docker pull gcr.io/google_containers/hyperkube-arm:v1.1.2
+docker pull gcr.io/google_containers/hyperkube-arm:v1.2.0
 echo "Starting the kubernetes master service"
 systemctl start k8s-master.service
 
