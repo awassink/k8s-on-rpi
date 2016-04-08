@@ -24,7 +24,7 @@ ExecStartPost=/bin/bash -c "sleep 10; \
 	andrewpsuedonym/etcd:2.1.1 \
 	etcdctl \
 	set /coreos.com/network/config '{ \"Network\": \"10.0.0.0/16\" }'"
-ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-etcd
+#ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-etcd
 
 [Install]
 WantedBy=multi-user.target

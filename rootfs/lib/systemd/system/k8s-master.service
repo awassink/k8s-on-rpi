@@ -29,16 +29,16 @@ ExecStart=/bin/bash -c "exec docker run \
 	    --enable-server \
 	    --hostname-override=$(/bin/hostname -I | /usr/bin/awk '{print $1}') \
 	    --config=/etc/kubernetes/manifests-multi"
-ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker run -d \
-        --name=k8s-master-proxy \
-	--net=host \
-	--privileged \
-	gcr.io/google_containers/hyperkube-arm:v1.2.0 /hyperkube proxy \
-	    --master=http://${K8S_MASTER_IP}:8080 \
-	    --v=2"
-ExecStop=/usr/bin/docker stop k8s-master k8s-master-proxy
-Restart=on-failure
-RestartSec=5
+#ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker run -d \
+#        --name=k8s-master-proxy \
+#	--net=host \
+#	--privileged \
+#	gcr.io/google_containers/hyperkube-arm:v1.2.0 /hyperkube proxy \
+#	    --master=http://${K8S_MASTER_IP}:8080 \
+#	    --v=2"
+#ExecStop=/usr/bin/docker stop k8s-master k8s-master-proxy
+#Restart=on-failure
+#RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

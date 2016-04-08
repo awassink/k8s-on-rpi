@@ -17,7 +17,7 @@ ExecStart=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock run \
     flanneld \
     	--etcd-endpoints=http://${K8S_MASTER_IP}:4001
 ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock cp k8s-flannel:/run/flannel/subnet.env /etc/kubernetes"
-ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-flannel
+#ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-flannel
 
 [Install]
 WantedBy=multi-user.target
