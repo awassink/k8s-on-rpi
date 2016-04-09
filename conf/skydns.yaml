@@ -21,27 +21,27 @@ spec:
     spec:
       containers:
       - name: etcd
-        image: vimagick/etcd-arm
+        image: kubernetesonarm/etcd
         imagePullPolicy: IfNotPresent
         resources:
           limits:
             cpu: 100m
             memory: 50Mi
         command:
-        - /etcd
+        - /usr/local/bin/etcd
         - -data-dir
         - /var/etcd/data
         - -listen-client-urls
-        - http://127.0.0.1:2379
+        - http://127.0.0.1:2379,http://127.0.0.1:4001
         - -advertise-client-urls
-        - http://127.0.0.1:2379
+        - http://127.0.0.1:2379,http://127.0.0.1:4001
         - -initial-cluster-token
         - skydns-etcd
         volumeMounts:
         - name: etcd-storage
           mountPath: /var/etcd/data
       - name: kube2sky
-        image: gcr.io/google_containers/kube2sky-arm:1.15
+        image: kubernetesonarm/kube2sky
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -49,17 +49,17 @@ spec:
             memory: 50Mi
         args:
         # command = "/kube2sky"
-        - -domain=cluster.local
-        - -kube_master_url=http://10.0.0.1:8080
+        - --domain=cluster.local
+        - --kube-master-url=http://rpi3-node:8080
       - name: skydns
-        image: gcr.io/google_containers/skydns-arm:2015-12-13
+        image: kubernetesonarm/skydns
         resources:
           limits:
             cpu: 100m
             memory: 50Mi
         args:
         # command = "/skydns"
-        - -machines=http://127.0.0.1:2379
+        - -machines=http://127.0.0.1:4001
         - -addr=0.0.0.0:53
         - -ns-rotate=false
         - -domain=cluster.local
@@ -70,22 +70,22 @@ spec:
         - containerPort: 53
           name: dns-tcp
           protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 1
-          timeoutSeconds: 5
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#            scheme: HTTP
+#          initialDelaySeconds: 30
+#          timeoutSeconds: 5
+#        readinessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8080
+#            scheme: HTTP
+#          initialDelaySeconds: 1
+#          timeoutSeconds: 5
       - name: healthz
-        image: gcr.io/google_containers/exechealthz-arm:1.1
+        image: kubernetesonarm/exechealthz
         imagePullPolicy: IfNotPresent
         resources:
           limits:
