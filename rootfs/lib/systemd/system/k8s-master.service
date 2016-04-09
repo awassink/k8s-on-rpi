@@ -8,27 +8,28 @@ EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker kill k8s-master k8s-master-proxy
 ExecStartPre=-/usr/bin/docker rm k8s-master k8s-master-proxy
 ExecStart=/bin/bash -c "exec docker run \
-        --name=k8s-master \
-	--net=host \
-	--pid=host \
-	-v /sys:/sys:ro \
-        -v /dev:/dev \
-        -v /var/lib/docker/:/var/lib/docker:rw \
-        -v /var/lib/kubelet:/var/lib/kubelet:rw \
+    --name=k8s-master \
+    --net=host \
+    --pid=host \
+    -v /etc/kubernetes/manifests-multi:/etc/kubernetes/manifests-multi \
+    -v /sys:/sys:ro \
+    -v /dev:/dev \
+    -v /var/lib/docker/:/var/lib/docker:rw \
+    -v /var/lib/kubelet:/var/lib/kubelet:rw \
 	-v /var/run:/var/run:rw \
 	--privileged \
 	gcr.io/google_containers/hyperkube-arm:v1.2.0 \
 	/hyperkube kubelet \
-	    --allow-privileged=true \
-	    --pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \
-	    --api-servers=http://localhost:8080 \
-            --cluster-dns=10.0.0.10 \
-            --cluster-domain=cluster.local \
-	    --v=2 \
-	    --address=0.0.0.0 \
-	    --enable-server \
-	    --hostname-override=$(/bin/hostname -I | /usr/bin/awk '{print $1}') \
-	    --config=/etc/kubernetes/manifests-multi"
+        --allow-privileged=true \
+        --pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \
+        --api-servers=http://localhost:8080 \
+        --cluster-dns=10.0.0.10 \
+        --cluster-domain=cluster.local \
+        --v=2 \
+        --address=0.0.0.0 \
+        --enable-server \
+        --hostname-override=$(/bin/hostname -I | /usr/bin/awk '{print $1}') \
+        --config=/etc/kubernetes/manifests-multi"
 #ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker run -d \
 #        --name=k8s-master-proxy \
 #	--net=host \
