@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: etcd
-        image: kubernetesonarm/etcd
+        image: gcr.io/google_containers/etcd-arm:2.2.1
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -41,7 +41,7 @@ spec:
         - name: etcd-storage
           mountPath: /var/etcd/data
       - name: kube2sky
-        image: kubernetesonarm/kube2sky
+        image: gcr.io/google_containers/kube2sky-arm:1.15
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -50,9 +50,9 @@ spec:
         args:
         # command = "/kube2sky"
         - --domain=cluster.local
-        - --kube-master-url=http://rpi3-node:8080
+        - --kube-master-url=http://127.0.0.1:8080
       - name: skydns
-        image: kubernetesonarm/skydns
+        image: gcr.io/google_containers/skydns-arm:1.0
         resources:
           limits:
             cpu: 100m
@@ -85,7 +85,7 @@ spec:
 #          initialDelaySeconds: 1
 #          timeoutSeconds: 5
       - name: healthz
-        image: kubernetesonarm/exechealthz
+        image: gcr.io/google_containers/exechealthz-arm:1.0
         imagePullPolicy: IfNotPresent
         resources:
           limits:
