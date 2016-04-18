@@ -21,8 +21,8 @@ ExecStartPost=/bin/bash -c "sleep 10; \
     /usr/bin/docker -H unix:///var/run/docker-bootstrap.sock run \
         --rm \
         --net=host \
-	andrewpsuedonym/etcd:2.1.1 \
-	etcdctl \
+	gcr.io/google_containers/etcd-arm:2.2.1 \
+	/bin/etcdctl \
 	set /coreos.com/network/config '{ \"Network\": \"10.0.0.0/16\" }'"
 #ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-etcd
 
