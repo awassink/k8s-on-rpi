@@ -10,6 +10,7 @@ ExecStart=/bin/bash -c "exec docker run \
         --name=k8s-worker \
         --net=host \
         --pid=host \
+        -v /etc/kubernetes/static-pods/worker:/etc/kubernetes/static-pods/worker \
         -v /sys:/sys:ro \
         -v /dev:/dev \
         -v /var/lib/docker/:/var/lib/docker:rw \
