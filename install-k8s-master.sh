@@ -28,12 +28,12 @@ echo "Starting the docker bootstrap service"
 systemctl start docker-bootstrap.service
 
 echo "Pulling necessary etcd Docker image"
-docker -H unix:///var/run/docker-bootstrap.sock pull andrewpsuedonym/etcd:2.1.1
+docker -H unix:///var/run/docker-bootstrap.sock pull gcr.io/google_containers/etcd-arm:2.2.1
 echo "Starting the etcd service"
 systemctl start k8s-etcd.service
 
 echo "Pulling necessary flannel Docker image"
-docker -H unix:///var/run/docker-bootstrap.sock pull andrewpsuedonym/flanneld
+docker -H unix:///var/run/docker-bootstrap.sock pull gcr.io/google_containers/flannel-arm:0.5.5
 echo "Starting the flannel service"
 systemctl start k8s-flannel.service
 
