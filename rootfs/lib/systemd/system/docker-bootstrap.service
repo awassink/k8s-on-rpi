@@ -5,7 +5,7 @@ After=network.target docker-bootstrap.socket
 Requires=docker-bootstrap.socket
 
 [Service]
-ExecStart=/usr/bin/docker daemon -H unix:///var/run/docker-bootstrap.sock -p /var/run/docker-bootstrap.pid --storage-driver=overlay --storage-opt dm.basesize=10G --iptables=false --ip-masq=false --bridge=none --graph=/var/lib/docker-bootstrap
+ExecStart=/usr/bin/docker daemon -H unix:///var/run/docker-bootstrap.sock -p /var/run/docker-bootstrap.pid --storage-driver=overlay --storage-opt dm.basesize=10G --iptables=false --ip-masq=false --bridge=none --graph=/var/lib/docker-bootstrap 
 ExecStartPost=/bin/bash -c "sleep 10"
 MountFlags=slave
 LimitNOFILE=1048576
