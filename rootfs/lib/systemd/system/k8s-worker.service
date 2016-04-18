@@ -35,6 +35,8 @@ ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker run -d \
 	--privileged \
 	gcr.io/google_containers/hyperkube-arm:v1.2.0 /hyperkube proxy \
 	    --master=http://${K8S_MASTER_IP}:8080 \
+            --proxy-mode=iptables \
+            --resource-container="" \
 	    --v=2"
 ExecStop=/usr/bin/docker stop k8s-worker k8s-worker-proxy
 Restart=on-failure
