@@ -20,7 +20,7 @@ spec:
       nodeSelector:
         role: loadbalancer
       containers:
-      - image: kubernetesonarm/loadbalancer
+      - image: kubernetesonarm/loadbalancer:0.7.0
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:

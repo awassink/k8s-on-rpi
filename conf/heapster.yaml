@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: influxdb
-        image: kubernetesonarm/influxdb
+        image: kubernetesonarm/influxdb:0.7.0
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /data
@@ -24,7 +24,7 @@ spec:
         nodeSelector:
           nodeType: master
       - name: grafana
-        image: kubernetesonarm/grafana
+        image: kubernetesonarm/grafana:0.7.0
         imagePullPolicy: IfNotPresent
         env:
           - name: INFLUXDB_SERVICE_URL
@@ -103,7 +103,7 @@ spec:
     spec:
       containers:
       - name: heapster
-        image: kubernetesonarm/heapster
+        image: kubernetesonarm/heapster:0.7.0
         imagePullPolicy: IfNotPresent
         command:
         - /heapster
