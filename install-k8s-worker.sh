@@ -2,7 +2,7 @@
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-apt-get install bridge-utils
+apt-get install bridge-utils glusterfs-client nfs-common
 
 echo "Copying kubernetes service configuration files"
 cp -f ./rootfs/lib/systemd/system/docker-bootstrap.service /lib/systemd/system/docker-bootstrap.service
