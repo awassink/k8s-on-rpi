@@ -10,7 +10,7 @@ ExecStart=/bin/bash -c "exec docker run \
         --name=k8s-worker \
         --net=host \
         --pid=host \
-        -v /etc/kubernetes/static-pods/worker:/etc/kubernetes/static-pods/worker \
+        -v /etc/kubernetes/static-pods/worker:/etc/kubernetes/static-pods/worker:ro \
         -v /sys:/sys:ro \
         -v /dev:/dev \
         -v /var/lib/docker/:/var/lib/docker:rw \
@@ -26,7 +26,7 @@ ExecStart=/bin/bash -c "exec docker run \
             --cluster-domain=cluster.local \
 	    --v=2 \
 	    --address=0.0.0.0 \
-	    --enable-server \
+            --enable-server=false
 	    --hostname-override=$(/bin/hostname -I | /usr/bin/awk '{print $1}') \
             --config=/etc/kubernetes/manifests"
 
