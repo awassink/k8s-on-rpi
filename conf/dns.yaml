@@ -28,7 +28,7 @@ spec:
             cpu: 100m
             memory: 50Mi
         command:
-        - /usr/local/bin/etcd
+        - etcd
         - -data-dir
         - /var/etcd/data
         - -listen-client-urls

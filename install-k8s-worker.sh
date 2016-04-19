@@ -2,7 +2,7 @@
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-apt-get install bridge-utils glusterfs-client nfs-common
+apt-get install -y bridge-utils glusterfs-client nfs-common
 
 echo "Copying kubernetes service configuration files"
 cp -f ./rootfs/lib/systemd/system/docker-bootstrap.service /lib/systemd/system/docker-bootstrap.service
@@ -36,4 +36,7 @@ echo "Pulling necessary hyperkube Docker image"
 docker pull gcr.io/google_containers/hyperkube-arm:v1.2.0
 echo "Starting the kubernetes worker service"
 systemctl start k8s-worker.service
+
+curl -fsSL -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.2.0/bin/linux/arm/kubectl
+chmod a+x /usr/bin/kubectl
 
