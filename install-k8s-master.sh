@@ -2,7 +2,7 @@
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-apt-get install bridge-utils glusterfs-client nfs-common
+apt-get install -y bridge-utils glusterfs-client nfs-common
 
 echo "Copying kubernetes service configuration files"
 mkdir /etc/kubernetes
@@ -45,3 +45,5 @@ docker pull gcr.io/google_containers/hyperkube-arm:v1.2.0
 echo "Starting the kubernetes master service"
 systemctl start k8s-master.service
 
+curl -fsSL -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.2.0/bin/linux/arm/kubectl
+chmod a+x /usr/bin/kubectl
