@@ -2,7 +2,7 @@
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
-apt-get install -y bridge-utils glusterfs-client nfs-common
+apt-get install -y bridge-utils glusterfs-client nfs-common dnsutils
 
 echo "Copying kubernetes service configuration files"
 mkdir /etc/kubernetes
