@@ -13,7 +13,7 @@ ExecStart=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock run \
     --name=k8s-etcd \
     -v /var/lib/kubernetes/etcd:/var/etcd/data \
     gcr.io/google_containers/etcd-arm:2.2.1 \
-    /bin/etcd \
+    etcd \
         --addr=127.0.0.1:4001 \
 	--bind-addr=0.0.0.0:4001 \
 	--data-dir=/var/etcd/data
@@ -22,7 +22,7 @@ ExecStartPost=/bin/bash -c "sleep 10; \
         --rm \
         --net=host \
 	gcr.io/google_containers/etcd-arm:2.2.1 \
-	/bin/etcdctl \
+	etcdctl \
 	set /coreos.com/network/config '{ \"Network\": \"10.0.0.0/16\" }'"
 #ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-etcd
 
