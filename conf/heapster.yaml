@@ -21,8 +21,6 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: influxdb-storage
-        nodeSelector:
-          nodeType: master
       - name: grafana
         image: kubernetesonarm/grafana:0.7.0
         imagePullPolicy: IfNotPresent
@@ -44,8 +42,8 @@ spec:
         volumeMounts:
         - mountPath: /var
           name: grafana-storage
-        nodeSelector:
-          nodeType: master
+      nodeSelector:
+        nodeType: master
       volumes:
       - name: influxdb-storage
         emptyDir: {}
