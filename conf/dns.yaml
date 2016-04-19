@@ -49,9 +49,9 @@ spec:
             memory: 50Mi
         args:
         # command = "/kube2sky"
-        - -domain=cluster.local
-        - -etcd-server=http://127.0.0.1:2379
-        - -kube_master_url=http://rpi-master:8080
+        - --domain=cluster.local
+        - --etcd-server=http://127.0.0.1:2379
+        - --kube_master_url=http://rpi-master:8080
       - name: skydns
         image: gcr.io/google_containers/skydns-arm:1.0
         resources:
@@ -102,6 +102,8 @@ spec:
       - name: etcd-storage
         emptyDir: {}
       dnsPolicy: Default  # Don't use cluster DNS.
+      nodeSelector:
+        nodeType: master
 ---
 apiVersion: v1
 kind: Service
