@@ -6,18 +6,19 @@ After=docker.service
 EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker kill k8s-worker k8s-worker-proxy
 ExecStartPre=-/usr/bin/docker rm k8s-worker k8s-worker-proxy
+ExecStartPre=-/bin/sh -c "mkdir -p /etc/kubernetes/static-pods/worker; mount -B /var/lib/kubelet /var/lib/kubelet; mount --make-shared /var/lib/kubelet"
 ExecStart=/bin/bash -c "exec docker run \
         --name=k8s-worker \
         --net=host \
         --pid=host \
-        -v /etc/kubernetes/static-pods/worker:/etc/kubernetes/static-pods/worker:ro \
+        -v /etc/kubernetes/static-pods/worker:/etc/kubernetes/manifests:ro \
         -v /sys:/sys:ro \
         -v /dev:/dev \
         -v /var/lib/docker/:/var/lib/docker:rw \
-        -v /var/lib/kubelet:/var/lib/kubelet:rw \
+        -v /var/lib/kubelet:/var/lib/kubelet:shared \
         -v /var/run:/var/run:rw \
         --privileged \
-        gcr.io/google_containers/hyperkube-arm:v1.2.0 \
+        awassink/hyperkube-arm:v1.2.0 \
         /hyperkube kubelet \
             --allow-privileged=true \
             --pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \

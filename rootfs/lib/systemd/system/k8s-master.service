@@ -7,18 +7,19 @@ Requires=k8s-etcd.service
 EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker kill k8s-master k8s-master-proxy
 ExecStartPre=-/usr/bin/docker rm k8s-master k8s-master-proxy
+ExecStartPre=-/bin/sh -c "mkdir -p /etc/kubernetes/static-pods/master; mount -B /var/lib/kubelet /var/lib/kubelet; mount --make-shared /var/lib/kubelet"
 ExecStart=/bin/bash -c "exec docker run \
     --name=k8s-master \
     --net=host \
     --pid=host \
-    -v /etc/kubernetes/manifests-multi:/etc/kubernetes/manifests-multi \
+        -v /etc/kubernetes/static-pods/master:/etc/kubernetes/manifests-multi \
     -v /sys:/sys:ro \
     -v /dev:/dev \
     -v /var/lib/docker/:/var/lib/docker:rw \
-    -v /var/lib/kubelet:/var/lib/kubelet:rw \
+        -v /var/lib/kubelet:/var/lib/kubelet:shared \
 	-v /var/run:/var/run:rw \
 	--privileged \
-	gcr.io/google_containers/hyperkube-arm:v1.2.0 \
+	awassink/hyperkube-arm:v1.2.0 \
 	/hyperkube kubelet \
         --allow-privileged=true \
         --pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \
