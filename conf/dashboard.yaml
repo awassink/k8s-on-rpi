@@ -25,7 +25,7 @@ spec:
         - containerPort: 9090
           protocol: TCP
       nodeSelector:
-        nodeType: worker
+        nodeType: master
 ---
 apiVersion: v1
 kind: Service
