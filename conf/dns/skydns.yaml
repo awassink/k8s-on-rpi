@@ -21,14 +21,13 @@ spec:
     spec:
       containers:
       - name: etcd
-        image: gcr.io/google_containers/etcd-arm:2.2.1
-        imagePullPolicy: IfNotPresent
+        image: vimagick/etcd-arm
         resources:
           limits:
             cpu: 100m
             memory: 50Mi
         command:
-        - etcd
+        - /etcd
         - -data-dir
         - /var/etcd/data
         - -listen-client-urls
@@ -41,8 +40,7 @@ spec:
         - name: etcd-storage
           mountPath: /var/etcd/data
       - name: kube2sky
-        image: gcr.io/google_containers/kube2sky-arm:1.15
-        imagePullPolicy: IfNotPresent
+        image: gcr.io/google_containers/kube2sky-arm:1.11
         resources:
           limits:
             cpu: 100m
@@ -53,7 +51,7 @@ spec:
         - -etcd-server=http://127.0.0.1:2379
         - -kube_master_url=http://rpi-master:8080
       - name: skydns
-        image: gcr.io/google_containers/skydns-arm:1.0
+        image: gcr.io/google_containers/skydns-arm:2015-12-13
         resources:
           limits:
             cpu: 100m
@@ -87,7 +85,6 @@ spec:
 #          timeoutSeconds: 5
       - name: healthz
         image: gcr.io/google_containers/exechealthz-arm:1.1
-        imagePullPolicy: IfNotPresent
         resources:
           limits:
             cpu: 10m
@@ -102,24 +99,3 @@ spec:
       - name: etcd-storage
         emptyDir: {}
       dnsPolicy: Default  # Don't use cluster DNS.
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kube-dns
-  namespace: kube-system
-  labels:
-    k8s-app: kube-dns
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "KubeDNS"
-spec:
-  selector:
-    k8s-app: kube-dns
-  clusterIP:  10.0.0.10
-  ports:
-  - name: dns
-    port: 53
-    protocol: UDP
-  - name: dns-tcp
-    port: 53
-    protocol: TCP
