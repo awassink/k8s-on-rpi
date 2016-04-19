@@ -6,7 +6,7 @@ After=docker.service
 EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker kill k8s-worker k8s-worker-proxy
 ExecStartPre=-/usr/bin/docker rm k8s-worker k8s-worker-proxy
-ExecStartPre=-/bin/sh -c "mkdir -p /etc/kubernetes/static-pods/worker; mount -B /var/lib/kubelet /var/lib/kubelet; mount --make-shared /var/lib/kubelet"
+#ExecStartPre=-/bin/sh -c "mkdir -p /etc/kubernetes/static-pods/worker; mount -B /var/lib/kubelet /var/lib/kubelet; mount --make-shared /var/lib/kubelet"
 ExecStart=/bin/bash -c "exec docker run \
         --name=k8s-worker \
         --net=host \
@@ -15,10 +15,11 @@ ExecStart=/bin/bash -c "exec docker run \
         -v /sys:/sys:ro \
         -v /dev:/dev \
         -v /var/lib/docker/:/var/lib/docker:rw \
-        -v /var/lib/kubelet:/var/lib/kubelet:shared \
+        -v /var/lib/kubelet:/var/lib/kubelet:rw \
         -v /var/run:/var/run:rw \
+        -v /:/rootfs:ro \
         --privileged \
-        awassink/hyperkube-arm:v1.2.0 \
+        gcr.io/google_containers/hyperkube-arm:v1.2.0 \
         /hyperkube kubelet \
             --allow-privileged=true \
             --pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \
@@ -27,7 +28,9 @@ ExecStart=/bin/bash -c "exec docker run \
             --cluster-domain=cluster.local \
 	    --v=2 \
 	    --address=0.0.0.0 \
-            --enable-server=false
+            --containerized \
+            --enable-server=false \
+            --node-labels=nodeType=worker \
 	    --hostname-override=$(/bin/hostname -I | /usr/bin/awk '{print $1}') \
             --config=/etc/kubernetes/manifests"
 
