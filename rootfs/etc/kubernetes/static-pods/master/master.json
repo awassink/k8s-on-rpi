@@ -1,7 +1,9 @@
 {
 "apiVersion": "v1",
 "kind": "Pod",
-"metadata": {"name":"k8s-master"},
+  "metadata": {
+    "name":"k8s-master"
+  },
 "spec":{
   "hostNetwork": true,
   "containers":[
@@ -15,17 +17,15 @@
               "--master=127.0.0.1:8080",
               "--node-monitor-grace-period=30s",
               "--pod-eviction-timeout=15s",
-              "--service-account-private-key-file=/srv/kubernetes/server.key",
-              "--root-ca-file=/srv/kubernetes/ca.crt",
+            "--service-account-private-key-file=/var/run/kubernetes/apiserver.key",
+            "--root-ca-file=/var/run/kubernetes/apiserver.crt",
               "--min-resync-period=3m",
               "--v=2"
       ],
-      "volumeMounts": [
-        {
-          "name": "data",
-          "mountPath": "/srv/kubernetes"
-        }
-      ]
+        "volumeMounts":[{
+          "name": "kubecerts",
+          "mountPath": "/var/run/kubernetes"
+        }]
     },
     {
       "name": "apiserver",
@@ -37,22 +37,15 @@
               "--service-cluster-ip-range=10.0.0.1/24",
               "--insecure-bind-address=0.0.0.0",
               "--etcd-servers=http://127.0.0.1:4001",
-              "--admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota",
-              "--client-ca-file=/srv/kubernetes/ca.crt",
-              "--basic-auth-file=/srv/kubernetes/basic_auth.csv",
+              "--admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,ResourceQuota",
               "--min-request-timeout=300",
-              "--tls-cert-file=/srv/kubernetes/server.cert",
-              "--tls-private-key-file=/srv/kubernetes/server.key",
-              "--token-auth-file=/srv/kubernetes/known_tokens.csv",
               "--allow-privileged=true",
-              "--v=4"
+              "--v=2"
       ],
-      "volumeMounts": [
-        {
-          "name": "data",
-          "mountPath": "/srv/kubernetes"
-        }
-      ]
+        "volumeMounts":[{
+          "name": "kubecerts",
+          "mountPath": "/var/run/kubernetes"
+        }]
     },
     {
       "name": "scheduler",
@@ -74,7 +67,7 @@
       ],
       "volumeMounts": [
         {
-          "name": "data",
+          "name": "kubecerts",
           "mountPath": "/data"
         }
       ]
@@ -82,9 +75,11 @@
   ],
   "volumes": [
     {
-      "name": "data",
-      "emptyDir": {}
+        "name": "kubecerts",
+        "hostPath": {
+          "path": "/var/lib/kubernetes/certs"
     }
+      }
   ]
  }
 }
