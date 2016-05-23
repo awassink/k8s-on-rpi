@@ -1,5 +1,14 @@
 #!/bin/bash
 
+echo "Updating sources."
+apt-get update
+
+echo "Copying k8s.conf, please enter master node ip or hostname."
+mkdir /etc/kubernetes
+cp rootfs/etc/kubernetes/k8s.conf
+/etc/kubernetes/k8s.conf
+nano /etc/kubernetes/k8s.conf
+
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 apt-get install -y bridge-utils glusterfs-client nfs-common dnsutils
