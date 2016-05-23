@@ -10,7 +10,7 @@ apt-get install -y bridge-utils glusterfs-client nfs-common dnsutils
 echo "Copying kubernetes service configuration files"
 mkdir -p /etc/kubernetes/static-pods/master
 cp -f ./rootfs/etc/kubernetes/k8s.conf /etc/kubernetes/k8s.conf
-cp -f ./rootfs/etc/kubernetes/static-pods/master/master.json kubernetes/static-pods/master/master.json
+cp -f ./rootfs/etc/kubernetes/static-pods/master/master.json /etc/kubernetes/static-pods/master/master.json
 cp -f ./rootfs/lib/systemd/system/docker-bootstrap.service /lib/systemd/system/docker-bootstrap.service
 cp -f ./rootfs/lib/systemd/system/docker-bootstrap.socket /lib/systemd/system/docker-bootstrap.socket
 cp -f ./rootfs/lib/systemd/system/k8s-etcd.service /lib/systemd/system/k8s-etcd.service
