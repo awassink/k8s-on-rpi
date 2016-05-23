@@ -26,7 +26,7 @@ So to summarize: be online.
 
 
 ######Installing the master node
-Boot a Raspi from the rpi-master SD-card, login through ssh (ssh root@rpi-master OR ssh root@<rpi-master ip address>) with the password 'hypriot' and execute the following:
+Boot a Raspi from the rpi-master SD-card, login through ssh (ssh root@rpi-master OR ssh root@master-node's-ip) with the password 'hypriot' and execute the following:
 ```
 git clone https://github.com/juulsme/k8s-on-rpi
 cd k8s-on-rpi/
@@ -36,7 +36,7 @@ git checkout k8s-1.2
 
 
 ######Installing the worker nodes
-Boot a Raspi from an rpi-node-xx SD-card, login through ssh (ssh root@rpi-master OR ssh root@<rpi-master ip address>) with the password 'hypriot' and execute the commands listed below.
+Boot a Raspi from an rpi-node-xx SD-card, login through ssh (ssh root@rpi-master OR ssh root@master-node's-ip) with the password 'hypriot' and execute the commands listed below.
 When the nano-editor pops-up, change the rpi-master reference either to the master node's hostname (ie rpi-master) or the master node's IP-address.
 ```
 git clone https://github.com/juulsme/k8s-on-rpi
