@@ -5,8 +5,7 @@ apt-get update
 
 echo "Copying k8s.conf, please enter master node ip or hostname."
 mkdir /etc/kubernetes
-cp -f ./rootfs/etc/kubernetes/k8s.conf
-/etc/kubernetes/k8s.conf
+cp -f ./rootfs/etc/kubernetes/k8s.conf /etc/kubernetes/k8s.conf
 nano /etc/kubernetes/k8s.conf
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
