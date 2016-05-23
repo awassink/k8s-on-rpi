@@ -20,6 +20,10 @@ Flash hypriot-rpi-20151115-132854.img on to micro SD-cards for the Raspi's. See 
 
 For each SD-card, modify the hostname entry in the occidentalis.txt file on the boot volume to something more useful than "black-pearl", for example rpi-master, rpi-node-01 etc.
 
+Before actually attempting to install the nodes, please make sure your Raspi is connected to the internet.
+This is also necessary in order for the cluster to work, since the flannel service fails to start if it cannot reach an NTP server.
+So to summarize: be online.
+
 
 ######Installing the master node
 Boot a Raspi from the rpi-master SD-card, login through ssh (ssh root@rpi-master OR ssh root@<rpi-master ip address>) with the password 'hypriot' and execute the following:
@@ -32,11 +36,12 @@ git checkout k8s-1.2
 
 
 ######Installing the worker nodes
-Boot a Raspi from an rpi-node-xx SD-card, login through ssh (ssh root@rpi-master OR ssh root@<rpi-master ip address>) with the password 'hypriot' and execute the following:
+Boot a Raspi from an rpi-node-xx SD-card, login through ssh (ssh root@rpi-master OR ssh root@<rpi-master ip address>) with the password 'hypriot' and execute the commands listed below.
+When the nano-editor pops-up, change the rpi-master reference either to the master node's hostname (ie rpi-master) or the master node's IP-address.
 ```
 git clone https://github.com/juulsme/k8s-on-rpi
 cd k8s-on-rpi/
 git checkout k8s-1.2
 ./install-k8s-worker.sh
 ```
-When the nano-editor pops-up, change the rpi-master reference either to the master node's hostname (ie rpi-master) or the master node's IP-address.
+
