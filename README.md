@@ -45,4 +45,4 @@ git checkout k8s-1.2
 ./install-k8s-worker.sh
 ```
 After the script completes, please reboot the worker, with the master node up and running. If everything is ok,
-you should be able to run `kubectl get nodes` and the newly installed worker should be visible and ready.
+you should be able to run `kubectl get nodes --server=http://rpi-master:8080` and the newly installed worker should be visible and ready.
