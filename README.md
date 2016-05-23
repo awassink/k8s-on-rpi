@@ -17,3 +17,4 @@
 Kubernetes on Raspberry PI
 ==========================
 
+flash hypriot-rpi-20151115-132854.img on to a micro-sd card
