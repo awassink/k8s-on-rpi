@@ -18,7 +18,7 @@ Kubernetes on Raspberry PI
 ==========================
 Flash hypriot-rpi-20151115-132854.img on to micro SD-cards for the Raspi's. See http://blog.hypriot.com/getting-started-with-docker-on-your-arm-device/ for instructions and http://blog.hypriot.com/downloads/ for the image.
 
-For each SD-card, modify the occidentalis.txt file on the boot volume to a useful hostname, ie rpi-master, rpi-node-01 etc.
+For each SD-card, modify the hostname entry in the occidentalis.txt file on the boot volume to something more useful than "black-pearl", for example rpi-master, rpi-node-01 etc.
 
 
 ######Installing the master node
