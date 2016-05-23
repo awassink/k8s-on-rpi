@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Updating sources."
+apt-get update
+
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 apt-get install -y bridge-utils glusterfs-client nfs-common dnsutils
