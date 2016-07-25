@@ -6,7 +6,7 @@ After=docker-bootstrap.service
 #TimeoutStartSec=120
 ExecStartPre=-/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock kill k8s-etcd
 ExecStartPre=-/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock rm k8s-etcd
-ExecStartPre=-/usr/bin/mkdir -p /var/lib/kubernetes/etcd
+ExecStartPre=-/bin/mkdir -p /var/lib/kubernetes/etcd
 ExecStart=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock run -d --net=host --name=k8s-etcd -v /var/lib/kubernetes/etcd:/var/etcd/data andrewpsuedonym/etcd:2.1.1 /bin/etcd --addr=127.0.0.1:4001 --bind-addr=0.0.0.0:4001 --data-dir=/var/etcd/data
 ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock run --net=host andrewpsuedonym/etcd:2.1.1 etcdctl set /coreos.com/network/config '{ \"Network\": \"10.0.0.0/16\" }'"
 #ExecStop=/usr/bin/docker -H unix:///var/run/docker-bootstrap.sock stop k8s-etcd
