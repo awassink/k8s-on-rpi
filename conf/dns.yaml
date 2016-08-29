@@ -54,6 +54,7 @@ spec:
         - --kube_master_url=http://rpi-master:8080
       - name: skydns
         image: gcr.io/google_containers/skydns-arm:1.0
+        imagePullPolicy: IfNotPresent
         resources:
           limits:
             cpu: 100m
