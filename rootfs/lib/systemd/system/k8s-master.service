@@ -1,45 +1,49 @@
 [Unit]
 Description=The Master Components for Kubernetes
 After=docker.service
-Requires=k8s-etcd.service
 
 [Service]
-#EnvironmentFile=/etc/kubernetes/k8s.conf
+EnvironmentFile=/etc/kubernetes/k8s.conf
 ExecStartPre=-/usr/bin/docker kill k8s-master k8s-master-proxy
 ExecStartPre=-/usr/bin/docker rm k8s-master k8s-master-proxy
 ExecStart=/bin/bash -c "exec docker run \
-						--name=k8s-master \
-						--net=host \
-						--pid=host \
-						--privileged \
-						-v /sys:/sys:ro \
-						-v /var/run:/var/run:rw \
-                        -v /:/rootfs:ro \
-                        -v /dev:/dev \
-                        -v /var/lib/docker/:/var/lib/docker:rw \
-                        -v /var/lib/kubelet/:/var/lib/kubelet:rw \
-						gcr.io/google_containers/hyperkube-arm:v1.3.3 /hyperkube kubelet \
-							--v=2 \
-							--address=0.0.0.0 \
-							--enable-server \
-							--allow-privileged=true \
-							--pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \
-							--api-servers=http://localhost:8080 \
-							--hostname-override=127.0.0.1 \
-                            --cluster-dns=10.0.0.10 \
-                            --cluster-domain=cluster.local \
-                            --containerized \
-							--config=/etc/kubernetes/manifests-multi"
+    --name=k8s-master \
+    --net=host \
+    --pid=host \
+    -v /etc/kubernetes/static-pods/master:/etc/kubernetes/manifests-multi:ro \
+    -v /sys:/sys:ro \
+    -v /dev:/dev \
+    -v /var/lib/docker/:/var/lib/docker:rw \
+    -v /var/lib/kubelet:/var/lib/kubelet:rw \
+    -v /var/run:/var/run:rw \
+    -v /:/rootfs:ro \
+    --privileged \
+    gcr.io/google_containers/hyperkube-arm:v1.3.3 \
+    /hyperkube kubelet \
+        --allow-privileged=true \
+	--pod_infra_container_image=gcr.io/google_containers/pause-arm:2.0 \
+	--api-servers=http://${K8S_MASTER_IP}:8080 \
+        --cluster-dns=10.0.0.10 \
+        --cluster-domain=cluster.local \
+	--v=2 \
+	--address=0.0.0.0 \
+        --containerized \
+        --enable-server \
+        --node-labels=nodeType=master \
+        --hostname-override=$(/bin/hostname -I | /usr/bin/awk '{print $1}') \
+	--config=/etc/kubernetes/manifests-multi"
 ExecStartPost=/bin/bash -c "sleep 10;/usr/bin/docker run -d \
-						--name=k8s-master-proxy \
-						--net=host \
-						--privileged \
-						gcr.io/google_containers/hyperkube-arm:v1.3.3 /hyperkube proxy \
-							--master=http://127.0.0.1:8080 \
-							--v=2"
+    --name=k8s-master-proxy \
+    --net=host \
+    --privileged \
+    gcr.io/google_containers/hyperkube-arm:v1.3.3 /hyperkube proxy \
+	    --master=http://${K8S_MASTER_IP}:8080 \
+            --proxy-mode=iptables \
+            --resource-container="" \
+	--v=2"
 #ExecStop=/usr/bin/docker stop k8s-master k8s-master-proxy
-Restart=on-failure
-RestartSec=5
+#Restart=on-failure
+#RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

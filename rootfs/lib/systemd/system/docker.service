@@ -5,11 +5,18 @@ After=network.target docker.socket k8s-flannel.service
 Requires=docker.socket k8s-flannel.service
 
 [Service]
+Type=notify
+EnvironmentFile=/etc/kubernetes/k8s.conf
 EnvironmentFile=/etc/kubernetes/subnet.env
+EnvironmentFile=-/etc/default/docker
 ExecStartPre=-/sbin/ifconfig docker0 down
 ExecStartPre=-/sbin/brctl delbr docker0
-ExecStart=/usr/bin/docker daemon -bip=${FLANNEL_SUBNET} -mtu=${FLANNEL_MTU} -H fd:// $DOCKER_OPTS
-EnvironmentFile=-/etc/default/docker
+ExecStart=/usr/bin/docker daemon \
+    --host=unix:///var/run/docker.sock \
+    --bip=${FLANNEL_SUBNET} \
+    --mtu=${FLANNEL_MTU} \
+    --exec-opt native.cgroupdriver=cgroupfs \
+    $DOCKER_OPTS
 ExecStartPost=/bin/bash -c "sleep 10"
 MountFlags=slave
 LimitNOFILE=1048576
